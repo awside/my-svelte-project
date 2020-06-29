@@ -10,6 +10,12 @@
   };
 
   let paste = () => {
+    clear();
+    document.getElementById("textarea-input").select();
+    document.execCommand("paste");
+  };
+
+  let format = () => {
     ls = "";
     rows = 5;
     ta.split(/\s+/).forEach(w => {
@@ -19,7 +25,7 @@
   };
 
   let copy = () => {
-    document.getElementById("textarea").select();
+    document.getElementById("textarea-format").select();
     document.execCommand("copy");
   };
 </script>
@@ -49,14 +55,15 @@
 <main>
   <h1>Lister</h1>
   <textarea
-    on:click={clear}
+    on:click={paste}
+    id="textarea-input"
     class="input"
     rows="10"
     bind:value={ta} />
-    <button on:click={paste}>Format</button>
+  <button on:click={format}>Format</button>
   <textarea
     on:click={copy}
-    id="textarea"
+    id="textarea-format"
     class="output"
     {rows}
     bind:value={ls} />
