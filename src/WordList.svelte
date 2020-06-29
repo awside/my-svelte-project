@@ -1,32 +1,21 @@
 <script>
-  let ta = "";
   let ls = "";
   let rows = 5;
 
-  let clear = () => {
-    ta = "";
-    ls = "";
-    rows = 5;
-  };
-
-  let paste = () => {
-    clear();
-    document.getElementById("textarea-input").select();
-    document.execCommand("paste");
-  };
-
   let format = () => {
-    ls = "";
-    rows = 5;
-    ta.split(/\s+/).forEach(w => {
-      rows++;
-      ls += `${w}\n`;
-    });
-  };
-
-  let copy = () => {
-    document.getElementById("textarea-format").select();
-    document.execCommand("copy");
+    navigator.clipboard
+      .readText()
+      .then(text => {
+        ls = "";
+        rows = 5;
+        text.split(/\s+/).forEach(w => {
+          rows++;
+          ls += `${w}\n`;
+        });
+      })
+      .then(() => {
+        navigator.clipboard.writeText(ls);
+      });
   };
 </script>
 
@@ -38,8 +27,12 @@
     padding: 20px;
   }
 
-  .input {
-    width: 100%;
+  button {
+    padding: 5px 20px;
+    border: 2px solid gray;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 2em;
   }
 
   .output {
@@ -53,18 +46,6 @@
 </style>
 
 <main>
-  <h1>Lister</h1>
-  <textarea
-    on:click={paste}
-    id="textarea-input"
-    class="input"
-    rows="10"
-    bind:value={ta} />
-  <button on:click={format}>Format</button>
-  <textarea
-    on:click={copy}
-    id="textarea-format"
-    class="output"
-    {rows}
-    bind:value={ls} />
+  <button on:click={format}>Lister</button>
+  <textarea class="output" {rows} bind:value={ls} />
 </main>
